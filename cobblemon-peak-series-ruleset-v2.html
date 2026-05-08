@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cobblemon Peak Series — Battle Format</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #111418;
+    color: #c9d4df;
+    min-height: 100vh;
+    padding: 40px 16px 80px;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #6b8099;
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #eaf2fb;
+    letter-spacing: -.3px;
+  }
+  .header-title span { color: #e8b84b; }
+  .header-sub {
+    font-size: 13px;
+    color: #6b8099;
+    margin-top: 6px;
+  }
+  .header-divider {
+    width: 48px;
+    height: 1px;
+    background: #2a3d52;
+    margin: 16px auto 0;
+  }
+
+  /* ── INTRO ── */
+  .intro {
+    font-size: 13px;
+    color: #8aa0b8;
+    line-height: 1.75;
+    padding: 4px 2px 10px;
+  }
+  .intro strong { color: #eaf2fb; font-weight: 600; }
+
+  /* ── SECTION CARD ── */
+  .sc {
+    background: #181e27;
+    border: 1px solid #222e3c;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .sh {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 18px;
+    border-bottom: 1px solid #222e3c;
+    cursor: pointer;
+    user-select: none;
+  }
+  .sh:hover { background: #1d2530; }
+
+  .st {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #eaf2fb;
+  }
+  .st .ico { font-size: 16px; color: #8aa0b8; }
+
+  .sh-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+  .tag-amber { color: #c48a20; border-color: #c48a2040; background: #c48a2012; }
+  .tag-blue  { color: #4a9fd4; border-color: #4a9fd440; background: #4a9fd412; }
+  .tag-green { color: #5aad5a; border-color: #5aad5a40; background: #5aad5a12; }
+  .tag-red   { color: #c05050; border-color: #c0505040; background: #c0505012; }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    color: #6b8099;
+    flex-shrink: 0;
+    transition: transform .25s;
+  }
+  .sc.open .chevron { transform: rotate(180deg); }
+
+  .sb {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+
+  .sc-desc {
+    padding: 11px 18px 12px;
+    border-bottom: 1px solid #222e3c;
+    font-size: 13px;
+    color: #8aa0b8;
+    line-height: 1.65;
+  }
+
+  .sf {
+    padding: 11px 18px;
+    border-top: 1px solid #222e3c;
+    background: #151b23;
+    font-size: 12px;
+    color: #6b8099;
+    line-height: 1.65;
+  }
+
+  /* ── PILLS ── */
+  .pill {
+    display: inline-block;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+  .pa { background: #2a2210; color: #d4a052; border-color: #6b4e1a; }
+  .pb { background: #101d2a; color: #4a9fd4; border-color: #1e4060; }
+  .pc { background: #2a1010; color: #c05050; border-color: #6b1a1a; }
+  .pd { background: #111f11; color: #5aad5a; border-color: #1e501e; }
+  .pe { background: #1a1030; color: #8b72d4; border-color: #3a2560; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  /* ── GROUP LABEL ── */
+  .gl {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: #4a5f75;
+    margin: 0 0 8px;
+  }
+
+  /* ── RULE ROWS ── */
+  .rr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px solid #1c2633;
+    gap: 12px;
+  }
+  .rr:last-child { border-bottom: none; padding-bottom: 0; }
+  .rk { font-size: 13px; color: #8aa0b8; }
+  .rv { font-size: 13px; font-weight: 500; color: #eaf2fb; text-align: right; }
+  .rv.danger { color: #c05050; }
+
+  /* ── CLAUSE ROWS ── */
+  .cr {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 9px 0;
+    border-bottom: 1px solid #1c2633;
+  }
+  .cr:last-child { border-bottom: none; }
+  .cdot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #5aad5a;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .cn { font-size: 13px; font-weight: 500; color: #eaf2fb; margin-bottom: 2px; }
+  .cx { font-size: 12px; color: #6b8099; line-height: 1.5; }
+  .cx strong { color: #eaf2fb; }
+
+  /* ── BAN ROWS ── */
+  .br {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 9px 0;
+    border-bottom: 1px solid #1c2633;
+  }
+  .br:last-child { border-bottom: none; }
+  .bx { font-size: 13px; color: #c05050; font-weight: 600; margin-top: 1px; flex-shrink: 0; }
+  .bn { font-size: 13px; font-weight: 500; color: #eaf2fb; margin-bottom: 2px; }
+  .bd { font-size: 12px; color: #6b8099; }
+
+  /* ── WHY ROWS ── */
+  .wr {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 9px 0;
+    border-bottom: 1px solid #1c2633;
+  }
+  .wr:last-child { border-bottom: none; }
+  .wdot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4a9fd4;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  /* ── COLLAPSED STATE ── */
+  .sc-body { display: none; }
+  .sc.open .sc-body { display: block; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 32px 0 8px;
+    border-top: 1px solid #1c2633;
+    margin-top: 10px;
+  }
+  .footer-title { font-size: 16px; font-weight: 600; color: #e8b84b; letter-spacing: .5px; }
+  .footer-sub { font-size: 11px; color: #4a5f75; letter-spacing: .06em; margin-top: 4px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">Official Server Format Document</div>
+    <div class="header-title">TamilCraft Season 2 <span>Battle Format</span></div>
+    <div class="header-sub">Inspired by VGC 2019 Ultra Series — The Community's Greatest Format</div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- INTRO -->
+  <p class="intro">Based on what the community loves most, here's a custom format designed for our Cobblemon server that captures that <strong>VGC 2019 Ultra Series</strong> energy — widely considered peak competitive Pokémon.</p>
+
+  <!-- CORE RULES -->
+  <div class="sc open" id="s1">
+    <div class="sh" onclick="toggle('s1')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Core rules
+      </div>
+      <span class="sh-tag tag-amber">Foundation</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sb" style="gap:0; padding:4px 18px;">
+        <div class="rr"><span class="rk">Battle style</span><span class="rv">Doubles (2v2), Bring 6 Pick 4</span></div>
+        <div class="rr"><span class="rk">Pokédex access</span><span class="rv">Full National Dex (non-Mythical)</span></div>
+        <div class="rr"><span class="rk">Mega Evolutions</span><span class="rv">1 per team via Mega Stone</span></div>
+        <div class="rr"><span class="rk">Restricted legendaries</span><span class="rv">Up to 2 per team</span></div>
+        <div class="rr"><span class="rk">Z-Moves / Dynamax / Terastalisation</span><span class="rv danger">Disabled</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESTRICTED LEGENDARIES -->
+  <div class="sc open" id="s2">
+    <div class="sh" onclick="toggle('s2')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Restricted legendaries
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(up to 2 per team)</span>
+      </div>
+      <span class="sh-tag tag-red">Pick up to 2</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sc-desc">Up to two of these may appear on your team. A restricted legendary may also be your Mega Evolution holder (except Rayquaza).</div>
+      <div class="sb">
+
+        <div>
+          <p class="gl">Weather trio</p>
+          <div class="pill-row">
+            <span class="pill pa">Kyogre / Primal Kyogre</span>
+            <span class="pill pa">Groudon / Primal Groudon</span>
+            <span class="pill pa">Rayquaza *</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Tower duo</p>
+          <div class="pill-row">
+            <span class="pill pa">Ho-Oh</span>
+            <span class="pill pa">Lugia</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Creation trio</p>
+          <div class="pill-row">
+            <span class="pill pa">Dialga</span>
+            <span class="pill pa">Palkia</span>
+            <span class="pill pa">Giratina</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Tao trio</p>
+          <div class="pill-row">
+            <span class="pill pa">Reshiram</span>
+            <span class="pill pa">Zekrom</span>
+            <span class="pill pa">Kyurem</span>
+            <span class="pill pa">Kyurem-Black</span>
+            <span class="pill pa">Kyurem-White</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Aura trio</p>
+          <div class="pill-row">
+            <span class="pill pa">Xerneas</span>
+            <span class="pill pa">Yveltal</span>
+            <span class="pill pa">Zygarde (10% / 50% / Complete)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Light trio</p>
+          <div class="pill-row">
+            <span class="pill pa">Solgaleo</span>
+            <span class="pill pa">Lunala</span>
+            <span class="pill pa">Necrozma</span>
+            <span class="pill pa">Necrozma-Dusk Mane</span>
+            <span class="pill pa">Necrozma-Dawn Wings</span>
+            <span class="pill pa">Ultra Necrozma *</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Heroes of Galar</p>
+          <div class="pill-row">
+            <span class="pill pa">Zacian (Hero form)</span>
+            <span class="pill pa">Zamazenta (Hero form)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Calyrex</p>
+          <div class="pill-row">
+            <span class="pill pa">Calyrex</span>
+            <span class="pill pa">Calyrex-Ice</span>
+            <span class="pill pa">Calyrex-Shadow</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Mewtwo</p>
+          <div class="pill-row">
+            <span class="pill pa">Mewtwo (may Mega Evolve to X or Y)</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="sf">* Rayquaza is a restricted Pokémon — if it Mega Evolves via Dragon Ascent, it uses your restricted Mega slot (not an open Mega slot). · Ultra Necrozma's Ultra Burst counts as your Mega slot. · Zacian / Zamazenta in Hero of Many Battles form only — Crowned forms are fully banned. · All Zygarde forms (10% / 50% / Complete) count as the same restricted slot. · Calyrex in base form counts as a restricted pick (same slot as its rider forms). · If your restricted Pokémon uses a Mega Stone or Primal Orb, that counts as your one Mega slot — no second separate Mega allowed.</div>
+    </div>
+  </div>
+
+  <!-- MEGA EVOLUTION -->
+  <div class="sc open" id="s3">
+    <div class="sh" onclick="toggle('s3')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Mega Evolution
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(1 per team)</span>
+      </div>
+      <span class="sh-tag tag-blue">1 slot</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sb">
+        <div>
+          <p class="gl">Counts as your Mega slot (restricted)</p>
+          <div class="pill-row">
+            <span class="pill pe">Mega Mewtwo X / Y</span>
+            <span class="pill pe">Primal Kyogre</span>
+            <span class="pill pe">Primal Groudon</span>
+            <span class="pill pe">Ultra Necrozma</span>
+          </div>
+        </div>
+        <div>
+          <p class="gl">Notable non-restricted Megas (any 1 allowed)</p>
+          <div class="pill-row">
+            <span class="pill pb">Mega Kangaskhan</span>
+            <span class="pill pb">Mega Salamence</span>
+            <span class="pill pb">Mega Gengar</span>
+            <span class="pill pb">Mega Metagross</span>
+            <span class="pill pb">Mega Lucario</span>
+            <span class="pill pb">Mega Manectric</span>
+            <span class="pill pb">Mega Lopunny</span>
+            <span class="pill pb">Mega Mawile</span>
+            <span class="pill pb">+ all valid Mega Stones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLAUSES -->
+  <div class="sc open" id="s4">
+    <div class="sh" onclick="toggle('s4')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Clauses
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(standard competitive rules)</span>
+      </div>
+      <span class="sh-tag tag-green">Required</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sb" style="gap:0; padding:4px 18px;">
+        <div class="cr">
+          <div class="cdot"></div>
+          <div><div class="cn">Species clause</div><div class="cx">No duplicate Pokémon on the same team</div></div>
+        </div>
+        <div class="cr">
+          <div class="cdot"></div>
+          <div><div class="cn">Item clause</div><div class="cx">No two Pokémon may hold the same item</div></div>
+        </div>
+        <div class="cr">
+          <div class="cdot"></div>
+          <div><div class="cn">Sleep clause</div><div class="cx">Max 1 opposing Pokémon put to sleep at a time (excluding Rest)</div></div>
+        </div>
+        <div class="cr">
+          <div class="cdot"></div>
+          <div><div class="cn">OHKO clause</div><div class="cx">Fissure, Guillotine, Horn Drill and Sheer Cold are <strong>banned</strong></div></div>
+        </div>
+        <div class="cr">
+          <div class="cdot"></div>
+          <div><div class="cn">Endless battle clause</div><div class="cx">No intentional stall-to-draw strategies or infinite loop setups</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANNED -->
+  <div class="sc open" id="s5">
+    <div class="sh" onclick="toggle('s5')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Banned Pokémon
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(Ubers / broken)</span>
+      </div>
+      <span class="sh-tag tag-red">Not allowed</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sb" style="gap:0; padding:4px 18px;">
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">Arceus (all forms)</div><div class="bd">Too centralizing — breaks team diversity</div></div>
+        </div>
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">Eternatus</div><div class="bd">Stat ceiling breaker — no counterplay</div></div>
+        </div>
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">Mega Rayquaza without Dragon Ascent</div><div class="bd">Allow only with Dragon Ascent required (standard rule)</div></div>
+        </div>
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">Zacian-Crowned / Zamazenta-Crowned</div><div class="bd">Crowned forms only — Hero forms allowed as restricted picks</div></div>
+        </div>
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">Smeargle with Dark Void</div><div class="bd">Ban Dark Void move entirely server-side if possible</div></div>
+        </div>
+        <div class="br">
+          <div class="bx">✕</div>
+          <div><div class="bn">All Mythical Pokémon</div><div class="bd">Mew, Celebi, Jirachi, Deoxys, Shaymin, Darkrai, Manaphy, Phione, Arceus*, Victini, Meloetta, Genesect, Diancie, Hoopa, Volcanion, Magearna, Marshadow, Zeraora, Meltan, Melmetal, and all others — none permitted. (*Arceus listed separately above.)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NON-RESTRICTED LEGENDARIES & SUB-LEGENDARIES -->
+  <div class="sc open" id="s6a">
+    <div class="sh" onclick="toggle('s6a')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Non-Restricted Pokémon
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(use freely, no slot limit)</span>
+      </div>
+      <span class="sh-tag tag-green">Free to use</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sc-desc">These legendary and sub-legendary Pokémon do <strong>not</strong> count toward your restricted slots. You may use any of them freely subject to Species Clause and team-building rules.</div>
+      <div class="sb">
+
+        <div>
+          <p class="gl">Tapu guardians</p>
+          <div class="pill-row">
+            <span class="pill pd">Tapu Koko</span>
+            <span class="pill pd">Tapu Lele</span>
+            <span class="pill pd">Tapu Bulu</span>
+            <span class="pill pd">Tapu Fini</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Legendary birds (Kanto)</p>
+          <div class="pill-row">
+            <span class="pill pd">Articuno</span>
+            <span class="pill pd">Zapdos</span>
+            <span class="pill pd">Moltres</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Legendary beasts (Johto)</p>
+          <div class="pill-row">
+            <span class="pill pd">Raikou</span>
+            <span class="pill pd">Entei</span>
+            <span class="pill pd">Suicune</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Eon duo (Hoenn)</p>
+          <div class="pill-row">
+            <span class="pill pd">Latios</span>
+            <span class="pill pd">Latias</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Regis (Hoenn / Crown Tundra)</p>
+          <div class="pill-row">
+            <span class="pill pd">Regirock</span>
+            <span class="pill pd">Regice</span>
+            <span class="pill pd">Registeel</span>
+            <span class="pill pd">Regieleki</span>
+            <span class="pill pd">Regidrago</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Lake guardians (Sinnoh)</p>
+          <div class="pill-row">
+            <span class="pill pd">Uxie</span>
+            <span class="pill pd">Mesprit</span>
+            <span class="pill pd">Azelf</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Lunar duo (Sinnoh)</p>
+          <div class="pill-row">
+            <span class="pill pd">Cresselia</span>
+            <span class="pill pd">Heatran</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Swords of Justice (Unova)</p>
+          <div class="pill-row">
+            <span class="pill pd">Cobalion</span>
+            <span class="pill pd">Terrakion</span>
+            <span class="pill pd">Virizion</span>
+            <span class="pill pd">Keldeo</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Forces of Nature (Unova)</p>
+          <div class="pill-row">
+            <span class="pill pd">Tornadus</span>
+            <span class="pill pd">Thundurus</span>
+            <span class="pill pd">Landorus</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Legendary birds (Galar — Galarian forms)</p>
+          <div class="pill-row">
+            <span class="pill pd">Galarian Articuno</span>
+            <span class="pill pd">Galarian Zapdos</span>
+            <span class="pill pd">Galarian Moltres</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Alolan ultra beasts</p>
+          <div class="pill-row">
+            <span class="pill pd">Nihilego</span>
+            <span class="pill pd">Buzzwole</span>
+            <span class="pill pd">Pheromosa</span>
+            <span class="pill pd">Xurkitree</span>
+            <span class="pill pd">Celesteela</span>
+            <span class="pill pd">Kartana</span>
+            <span class="pill pd">Guzzlord</span>
+            <span class="pill pd">Poipole</span>
+            <span class="pill pd">Naganadel</span>
+            <span class="pill pd">Stakataka</span>
+            <span class="pill pd">Blacephalon</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Other sub-legendaries</p>
+          <div class="pill-row">
+            <span class="pill pd">Suicune</span>
+            <span class="pill pd">Type: Null</span>
+            <span class="pill pd">Silvally</span>
+            <span class="pill pd">Cosmog</span>
+            <span class="pill pd">Cosmoem</span>
+            <span class="pill pd">Kubfu</span>
+            <span class="pill pd">Urshifu (Single Strike)</span>
+            <span class="pill pd">Urshifu (Rapid Strike)</span>
+            <span class="pill pd">Glastrier</span>
+            <span class="pill pd">Spectrier</span>
+            <span class="pill pd">Chien-Pao</span>
+            <span class="pill pd">Ting-Lu</span>
+            <span class="pill pd">Chi-Yu</span>
+            <span class="pill pd">Wo-Chien</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="sf">All non-restricted Pokémon above are subject to Species Clause (no duplicates) and Item Clause (no duplicate held items). Ultra Beasts are treated as non-restricted sub-legendaries in this format.</div>
+    </div>
+  </div>
+
+  <!-- SPECIAL FORMS ALLOWED -->
+  <div class="sc open" id="s6b">
+    <div class="sh" onclick="toggle('s6b')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Special Forms Allowed
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(form-change rules)</span>
+      </div>
+      <span class="sh-tag tag-blue">Form rules</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sc-desc">These special alternate forms and battle forms are <strong>permitted</strong> in Peak Series. Each entry notes whether it uses a restricted or non-restricted slot.</div>
+      <div class="sb">
+
+        <div>
+          <p class="gl">Non-restricted special forms (free slot)</p>
+          <div class="pill-row">
+            <span class="pill pd">Ash-Greninja (Battle Bond)</span>
+            <span class="pill pd">Rotom-Heat / Wash / Frost / Fan / Mow</span>
+            <span class="pill pd">Wormadam (Plant / Sandy / Trash)</span>
+            <span class="pill pd">Meloetta-Pirouette</span>
+            <span class="pill pd">Aegislash (Shield / Blade)</span>
+            <span class="pill pd">Mimikyu (Disguise)</span>
+            <span class="pill pd">Wishiwashi (School)</span>
+            <span class="pill pd">Minior (Meteor / Core)</span>
+            <span class="pill pd">Morpeko (Full Belly / Hangry)</span>
+            <span class="pill pd">Darmanitan (Standard / Zen)</span>
+            <span class="pill pd">Galarian Darmanitan (Standard / Zen)</span>
+            <span class="pill pd">Shaymin-Sky</span>
+            <span class="pill pd">Tornadus / Thundurus / Landorus (Therian)</span>
+            <span class="pill pd">Hoopa Unbound</span>
+            <span class="pill pd">Oricorio (all 4 styles)</span>
+            <span class="pill pd">Lycanroc (Midday / Midnight / Dusk)</span>
+            <span class="pill pd">Silvally (all type memories)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Restricted special forms (use restricted slot)</p>
+          <div class="pill-row">
+            <span class="pill pa">Zygarde-10% / 50% / Complete</span>
+            <span class="pill pa">Necrozma-Dusk Mane / Dawn Wings</span>
+            <span class="pill pa">Ultra Necrozma (counts as Mega slot)</span>
+            <span class="pill pa">Kyurem-Black / Kyurem-White</span>
+            <span class="pill pa">Calyrex-Ice / Calyrex-Shadow</span>
+            <span class="pill pa">Zacian-Hero / Zamazenta-Hero</span>
+            <span class="pill pa">Primal Kyogre (counts as Mega slot)</span>
+            <span class="pill pa">Primal Groudon (counts as Mega slot)</span>
+            <span class="pill pa">Mega Mewtwo X / Y (counts as Mega slot)</span>
+            <span class="pill pa">Mega Rayquaza via Dragon Ascent (counts as Mega slot)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Banned special forms (not allowed)</p>
+          <div class="pill-row">
+            <span class="pill pc">Zacian-Crowned</span>
+            <span class="pill pc">Zamazenta-Crowned</span>
+            <span class="pill pc">Eternamax Eternatus</span>
+            <span class="pill pc">Deoxys (all forms) — Mythical</span>
+            <span class="pill pc">Shaymin-Sky — Mythical (base Shaymin banned)</span>
+            <span class="pill pc">Hoopa Confined / Unbound — Mythical</span>
+            <span class="pill pc">Arceus (all type plates) — banned entirely</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="sf">Ash-Greninja transforms automatically via Battle Bond — no item needed. · Shaymin-Sky is the forme of a Mythical and is therefore banned. · Hoopa Unbound is listed as non-restricted above only if your server decides to allow it as an Ultra Beast-tier sub-legendary; otherwise ban it as a Mythical. · Rotom forms are all legal and share the same Rotom species slot.</div>
+    </div>
+  </div>
+
+  <!-- FULL BANNED LIST -->
+  <div class="sc open" id="s6c">
+    <div class="sh" onclick="toggle('s6c')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Full Banned List
+        <span style="font-weight:400;color:#6b8099;font-size:13px;">(Mythicals + broken Pokémon)</span>
+      </div>
+      <span class="sh-tag tag-red">Not allowed</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sc-desc">None of the Pokémon below may be used in Peak Series under any circumstance — not as restricted picks, not as support.</div>
+      <div class="sb">
+
+        <div>
+          <p class="gl">Generation I mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Mew</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation II mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Celebi</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation III mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Jirachi</span>
+            <span class="pill pc">Deoxys (Normal / Attack / Defense / Speed)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation IV mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Phione</span>
+            <span class="pill pc">Manaphy</span>
+            <span class="pill pc">Darkrai</span>
+            <span class="pill pc">Shaymin (Land / Sky)</span>
+            <span class="pill pc">Arceus (all 18 forms)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation V mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Victini</span>
+            <span class="pill pc">Keldeo</span>
+            <span class="pill pc">Meloetta (Aria / Pirouette)</span>
+            <span class="pill pc">Genesect (all drives)</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation VI mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Diancie / Mega Diancie</span>
+            <span class="pill pc">Hoopa (Confined / Unbound)</span>
+            <span class="pill pc">Volcanion</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation VII mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Magearna (original color too)</span>
+            <span class="pill pc">Marshadow</span>
+            <span class="pill pc">Zeraora</span>
+            <span class="pill pc">Meltan</span>
+            <span class="pill pc">Melmetal</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Generation VIII mythicals</p>
+          <div class="pill-row">
+            <span class="pill pc">Zarude</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Banned non-mythicals (too broken)</p>
+          <div class="pill-row">
+            <span class="pill pc">Eternatus</span>
+            <span class="pill pc">Zacian-Crowned</span>
+            <span class="pill pc">Zamazenta-Crowned</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="gl">Banned moves / strategies</p>
+          <div class="pill-row">
+            <span class="pill pc">Dark Void (any user)</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="sf">Keldeo is listed as a Mythical (Gen V) and is therefore banned — it does NOT get a free non-restricted slot despite being Sword of Justice adjacent. · Diancie's Mega form is also banned since the base form is Mythical. · Genesect with any Drive is banned — all variants.</div>
+    </div>
+  </div>
+
+  <!-- WHY THIS FORMAT -->
+  <div class="sc open" id="s7">
+    <div class="sh" onclick="toggle('s7')">
+      <div class="st">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Why this format feels like "Peak Pokémon"
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="sc-body">
+      <div class="sb" style="gap:0; padding:4px 18px;">
+        <div class="wr">
+          <div class="wdot"></div>
+          <div><div class="cn">Mirrors VGC 2019 Ultra Series</div><div class="cx">The community's most beloved format — still discussed years later</div></div>
+        </div>
+        <div class="wr">
+          <div class="wdot"></div>
+          <div><div class="cn">Mega + 2 Restricted combo</div><div class="cx">Creates massive team-building depth — no two teams play the same</div></div>
+        </div>
+        <div class="wr">
+          <div class="wdot"></div>
+          <div><div class="cn">True counterplay for every threat</div><div class="cx">Groudon beats Xerneas, Kyogre beats Groudon, Rayquaza beats both weather setters</div></div>
+        </div>
+        <div class="wr">
+          <div class="wdot"></div>
+          <div><div class="cn">Support Pokémon matter</div><div class="cx">Incineroar, Amoonguss, Cresselia, Tapu Fini shine alongside legends — not just raw power</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-title">⚔ TamilCraft Season 2 Battle Format ⚔</div>
+    <div class="footer-sub">Built for peak battles · Inspired by VGC 2019 Ultra Series</div>
+  </div>
+
+</div>
+
+<script>
+  function toggle(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+</body>
+</html>
